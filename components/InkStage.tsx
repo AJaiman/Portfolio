@@ -18,7 +18,7 @@ import {
 
 const INTRO_MS = 1900;
 const TITLE_STAGGER = 0.035;
-const ICON_STAGGER = 0.05;
+const ICON_STAGGER = 0.028;
 
 const clamp01 = (v: number) => (v < 0 ? 0 : v > 1 ? 1 : v);
 const smoothstep = (a: number, b: number, v: number) => {

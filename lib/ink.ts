@@ -4,7 +4,7 @@ import { COMPASS, DOODLE_STROKES, ENVELOPE, FACE, ROBOT_ARM } from "./doodles";
 export const TITLE_SLOTS = 12;
 export const ICON_SLOTS = DOODLE_STROKES;
 const TITLE_SAMPLES = 56;
-const ICON_SAMPLES = 44;
+const ICON_SAMPLES = 88;
 const TAU = Math.PI * 2;
 
 /** Fixed unit height for the stage; width is derived from the viewport aspect
@@ -108,7 +108,11 @@ export function buildStates(): InkState[] {
     // The flourish is pinned to the final slot in every state so the underline
     // stays an underline across the whole page instead of becoming a letter.
     const title = [...pad(letters, TITLE_SLOTS - 1, TITLE_SAMPLES), swash];
-    const icon = doodle.map((d) => take(d, ICON_SAMPLES));
+    const icon = pad(
+      doodle.map((d) => take(d, ICON_SAMPLES)),
+      ICON_SLOTS,
+      ICON_SAMPLES
+    );
 
     return {
       title,
@@ -172,7 +176,7 @@ export function titlePlace(index: number, W: number, titleWidth: number): Place 
 
 export function iconPlace(index: number, W: number): Place {
   if (index === 0) {
-    return { x: W / 2, y: 232, s: clamp(W * 0.0016, 1.1, 1.75) };
+    return { x: W / 2, y: 228, s: clamp(W * 0.00165, 1.05, 1.8) };
   }
   const margin = Math.max(54, W * 0.065);
   const s = clamp(W * 0.00075, 0.5, 0.95);
@@ -302,9 +306,10 @@ export function morphStroke(
   }
 
   // A collapsed slot is a single repeated point; round caps would draw it as a
-  // visible dot, so extent decides whether the slot is inked at all.
+  // visible dot, so extent decides whether the slot is inked at all. The floor
+  // clears the idle drift, which otherwise smears a collapsed point into a speck.
   const extent = Math.hypot(maxX - minX, maxY - minY);
-  const opacity = clamp((extent - 2) / 7, 0, 1);
+  const opacity = clamp((extent - 3.5) / 6, 0, 1);
 
   return { d, opacity };
 }
