@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" width="1000" height="1000">
+  <rect width="1000" height="1000" fill="#efebe0" />
+  <rect x="26" y="26" width="948" height="948" fill="none" stroke="#1a1815"
+    stroke-opacity="0.16" stroke-width="3" stroke-dasharray="16 13" />
+  <g fill="none" stroke="#1a1815" stroke-opacity="0.22" stroke-width="5"
+    stroke-linecap="round" stroke-linejoin="round">
+    <path d="M360 560 L440 462 L508 540 L556 494 L640 560" />
+    <circle cx="398" cy="424" r="22" />
+  </g>
+  <text x="500" y="660" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, monospace"
+    font-size="30" letter-spacing="7" fill="#9c9488">DETAIL</text>
+  <text x="500" y="704" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, monospace"
+    font-size="20" letter-spacing="2" fill="#b5aea0">1 : 1 — replace in /public/projects</text>
+</svg>

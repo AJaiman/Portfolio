@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900">
+  <rect width="1600" height="900" fill="#efebe0" />
+  <rect x="30" y="30" width="1540" height="840" fill="none" stroke="#1a1815"
+    stroke-opacity="0.16" stroke-width="3" stroke-dasharray="16 13" />
+  <g fill="none" stroke="#1a1815" stroke-opacity="0.22" stroke-width="4"
+    stroke-linecap="round" stroke-linejoin="round">
+    <path d="M690 500 L760 416 L818 484 L860 444 L916 500 Z" />
+    <circle cx="726" cy="382" r="20" />
+  </g>
+  <text x="800" y="576" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, monospace"
+    font-size="30" letter-spacing="7" fill="#9c9488">SCREENSHOT</text>
+  <text x="800" y="620" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, monospace"
+    font-size="20" letter-spacing="2" fill="#b5aea0">16 : 9 — replace in /public/projects</text>
+</svg>
