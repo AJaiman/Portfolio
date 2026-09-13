@@ -1,26 +1,225 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --paper: #f7f4ed;
+  --paper-deep: #efebe0;
+  --ink: #1a1815;
+  --ink-soft: #57524a;
+  --ink-faint: #9c9587;
+  --blue: #8fb5d4;
+  --red: #c4462a;
+
+  --copy-in: 0;
+  --copy-y: 20px;
+  --hint: 1;
+  --head-fade: 0;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-paper: var(--paper);
+  --color-paper-deep: var(--paper-deep);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
+  --color-pencil: var(--blue);
+  --color-mark: var(--red);
+  --font-sans: var(--font-instrument);
+  --font-mono: var(--font-plex-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--paper);
+  color: var(--ink-soft);
+  font-family: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--red) 22%, transparent);
+  color: var(--ink);
+}
+
+/* Paper: a faint drafting-pad dot grid with a light grain over it. */
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+body::before {
+  background-image: radial-gradient(circle at 1px 1px, rgba(26, 24, 21, 0.5) 1px, transparent 0);
+  background-size: 27px 27px;
+  opacity: 0.07;
+}
+
+body::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.035;
+}
+
+/* ---- the ink layer ---- */
+
+.ink-stage {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 30;
+}
+
+.ink-line,
+.ink-ghost {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ink-line {
+  stroke: var(--ink);
+  stroke-width: 3.6;
+}
+
+.ink-ghost {
+  stroke: var(--blue);
+  stroke-width: 3.1;
+}
+
+.head-fade {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 34vh;
+  z-index: 25;
+  pointer-events: none;
+  opacity: var(--head-fade);
+  background: linear-gradient(
+    to bottom,
+    var(--paper) 0%,
+    var(--paper) 55%,
+    color-mix(in srgb, var(--paper) 72%, transparent) 78%,
+    transparent 100%
+  );
+}
+
+/* ---- shared marks ---- */
+
+/* Matches the left margin the drawn section titles sit at. */
+.gutter {
+  padding-inline: max(32px, 6.5vw);
+}
+
+.label {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+/* The double stroke: a committed edge with the searching line still showing
+   underneath it. Same idea as the drawing, applied to boxes. */
+.sketch {
+  position: relative;
+  border: 1px solid color-mix(in srgb, var(--ink) 22%, transparent);
+  background: color-mix(in srgb, #fff 46%, transparent);
+}
+
+.sketch::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border: 1px solid var(--blue);
+  opacity: 0.45;
+  transform: translate(3px, 3px) rotate(-0.18deg);
+  pointer-events: none;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+}
+
+.sketch:hover::after {
+  transform: translate(6px, 6px) rotate(0.22deg);
+  opacity: 0.8;
+}
+
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.85rem 1.6rem;
+  font-size: 0.875rem;
+  letter-spacing: 0.02em;
+  border: 1px solid var(--ink);
+  color: var(--ink);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+.btn::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border: 1px solid var(--blue);
+  transform: translate(4px, 4px) rotate(-0.2deg);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn:hover {
+  transform: translate(-1px, -1px);
+}
+
+.btn:hover::after {
+  transform: translate(7px, 7px) rotate(0.24deg);
+}
+
+.btn-solid {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.btn-solid:hover {
+  background: #000;
+}
+
+.link-underline {
+  background-image: linear-gradient(var(--red), var(--red));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 1px;
+  transition: background-size 0.35s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s ease;
+}
+
+.link-underline:hover {
+  background-size: 100% 1px;
+  color: var(--ink);
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.75s ease, transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }
