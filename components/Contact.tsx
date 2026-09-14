@@ -1,21 +1,32 @@
 import Reveal from "./Reveal";
 
-const EMAIL = "aravjaiman1@gmail.com";
+const EMAIL = "aravjaiman@outlook.com";
 
 const SOCIALS = [
-  { label: "GitHub", handle: "@aravjaiman", href: "https://github.com/aravjaiman" },
-  { label: "LinkedIn", handle: "in/aravjaiman", href: "https://linkedin.com/in/aravjaiman" },
+  {
+    label: "GitHub",
+    handle: "@ajaiman",
+    href: "https://github.com/ajaiman",
+  },
+  {
+    label: "LinkedIn",
+    handle: "in/aravjaiman",
+    href: "https://linkedin.com/in/aravjaiman",
+  },
   { label: "X", handle: "@aravjaiman", href: "https://x.com/aravjaiman" },
 ];
 
 export default function Contact() {
   return (
-    <section id="contact" className="relative z-10 min-h-[105vh] pt-[42vh] pb-[14vh]">
+    <section
+      id="contact"
+      className="relative z-10 min-h-[105vh] pt-[42vh] pb-[14vh]"
+    >
       <div className="gutter">
         <Reveal>
           <p className="max-w-[34rem] text-[1.0625rem] leading-[1.75] text-ink-soft">
-            Open to internships, collaborations, and anyone who wants to argue about
-            pencils.
+            Open to internships, collaborations, and anyone who wants to argue
+            about pencils.
           </p>
         </Reveal>
 
