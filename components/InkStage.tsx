@@ -17,6 +17,19 @@ import {
 } from "@/lib/ink";
 
 const INTRO_MS = 1900;
+/** How long after mount a jump still counts as arrival rather than reading. */
+const SETTLE_MS = 700;
+/** How long a deep arrival holds the stage blank waiting for the scroll to land. */
+const ARRIVE_HOLD_MS = 250;
+
+/** Set once the stage has mounted in this document, so a second mount can be
+ *  recognised as a client-side return rather than a first visit. */
+let mountedBefore = false;
+/** When the stage last tore down. React's development double-invoke re-runs the
+ *  effect in the same tick, which must not read as the reader having left for a
+ *  project page and come back. */
+let lastTeardown = 0;
+const REMOUNT_MS = 50;
 const TITLE_STAGGER = 0.035;
 const ICON_STAGGER = 0.028;
 
@@ -78,9 +91,41 @@ export default function InkStage() {
     measure();
 
     const root = document.documentElement;
-    const started = performance.now();
+
+    // Coming back from a project page, or following a #hash link, drops the
+    // reader mid-document with a freshly mounted stage. Replaying the opening
+    // there would show the face and name for a beat before the ink scrambled
+    // into the section they actually landed on, so the stage arrives already
+    // settled instead.
+    //
+    // A second mount in the same document only happens on a client-side return,
+    // which is the one case scrollY cannot report: the router restores the
+    // position a frame or two after this effect runs, so the stage waits for it
+    // rather than reading a position that is still zero.
+    const returning =
+      mountedBefore && performance.now() - lastTeardown > REMOUNT_MS;
+    mountedBefore = true;
+
+    const landedDeep =
+      returning ||
+      window.scrollY > 4 ||
+      SECTIONS.findIndex(({ id }) => id === window.location.hash.slice(1)) > 0;
+
+    const mounted = performance.now();
+    let started = mounted - (landedDeep ? INTRO_MS : 0);
+    let settling = true;
     let smoothed = 0;
     let revealed = false;
+
+    // Any real input means the reader is driving, so a later jump is theirs to
+    // watch travel rather than something to snap past.
+    const endSettle = () => {
+      settling = false;
+    };
+    const settleEvents = ["wheel", "touchstart", "keydown"] as const;
+    for (const type of settleEvents) {
+      window.addEventListener(type, endSettle, { once: true, passive: true });
+    }
 
     const paint = (
       slots: Slot[],
@@ -147,15 +192,26 @@ export default function InkStage() {
       const vh = window.innerHeight;
       const y = window.scrollY;
 
-      const intro = calm ? 1 : clamp01((now - started) / INTRO_MS);
-      const introEase = 1 - Math.pow(1 - intro, 3);
-
       let target = 0;
       for (let i = 1; i < tops.length; i++) {
         const start = tops[i] - vh * 1.15;
         const end = tops[i] - vh * 0.35;
         target += clamp01((y - start) / (end - start));
       }
+
+      if (settling) {
+        if (target > 0.002) {
+          started = now - INTRO_MS;
+          smoothed = target;
+          settling = false;
+        } else if (now - mounted > SETTLE_MS) {
+          settling = false;
+        }
+      }
+
+      const intro = calm ? 1 : clamp01((now - started) / INTRO_MS);
+      const introEase = 1 - Math.pow(1 - intro, 3);
+
       // Scroll is held until the opening lands; the lerp then carries the ink
       // across instead of snapping it to wherever the reader already scrolled.
       if (intro < 1) target = 0;
@@ -167,6 +223,13 @@ export default function InkStage() {
       root.style.setProperty("--copy-y", `${((1 - copy) * 20).toFixed(1)}px`);
       root.style.setProperty("--hint", (1 - smoothstep(0.02, 0.2, h)).toFixed(3));
       root.style.setProperty("--head-fade", clamp01(smoothed * 2.2).toFixed(3));
+
+      // A blank frame or two beats a flash of the wrong section while a
+      // restored scroll position lands.
+      if (landedDeep && settling && now - mounted < ARRIVE_HOLD_MS) {
+        raf = requestAnimationFrame(draw);
+        return;
+      }
 
       let A: InkState;
       let B: InkState;
@@ -223,8 +286,12 @@ export default function InkStage() {
     ro.observe(document.body);
 
     return () => {
+      lastTeardown = performance.now();
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", measure);
+      for (const type of settleEvents) {
+        window.removeEventListener(type, endSettle);
+      }
       ro.disconnect();
     };
   }, []);

@@ -2,10 +2,19 @@
 
 import Link from "next/link";
 import { useEffect, useRef } from "react";
-import { PROJECTS } from "@/lib/projects";
+import { PROJECTS, type Media } from "@/lib/projects";
 import Reveal from "./Reveal";
 
 const clamp01 = (v: number) => (v < 0 ? 0 : v > 1 ? 1 : v);
+
+/** The card preview reuses the project's cover, so swapping in a real
+ *  screenshot updates the card and the project page together. */
+function previewSrc(cover?: Media) {
+  if (!cover) return null;
+  if (cover.kind === "image") return cover.src;
+  if (cover.kind === "video") return cover.poster ?? null;
+  return null;
+}
 
 export default function Projects() {
   const cards = useRef<(HTMLAnchorElement | null)[]>([]);
@@ -51,47 +60,60 @@ export default function Projects() {
         </Reveal>
 
         <div className="mt-16 grid max-w-[62rem] gap-7 sm:grid-cols-2">
-          {PROJECTS.map((project, i) => (
-            <Link
-              key={project.slug}
-              href={`/projects/${project.slug}`}
-              ref={(el) => {
-                cards.current[i] = el;
-              }}
-              style={{ opacity: 0, transform: "translate3d(0, 96px, 0)" }}
-              className="sketch group flex h-full flex-col p-8"
-            >
-              <div className="flex items-baseline justify-between">
-                <span className="label text-mark">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <span className="label">{project.year}</span>
-              </div>
-
-              <h3 className="mt-7 text-[1.35rem] leading-snug text-ink">
-                {project.name}
-              </h3>
-              <p className="mt-3 text-[0.975rem] leading-[1.7] text-ink-soft">
-                {project.blurb}
-              </p>
-
-              <div className="mt-auto flex items-end justify-between gap-6 pt-8">
-                <div className="flex flex-wrap gap-x-4 gap-y-1">
-                  {project.stack.slice(0, 3).map((tag) => (
-                    <span key={tag} className="label">
-                      {tag}
-                    </span>
-                  ))}
+          {PROJECTS.map((project, i) => {
+            const preview = previewSrc(project.cover);
+            return (
+              <Link
+                key={project.slug}
+                href={`/projects/${project.slug}`}
+                ref={(el) => {
+                  cards.current[i] = el;
+                }}
+                style={{ opacity: 0, transform: "translate3d(0, 96px, 0)" }}
+                className="sketch group flex h-full flex-col p-8"
+              >
+                <div className="flex items-baseline justify-between gap-6">
+                  <h3 className="text-[1.35rem] leading-snug text-ink">
+                    {project.name}
+                  </h3>
+                  <span className="label shrink-0">{project.year}</span>
                 </div>
-                <span
-                  aria-hidden
-                  className="text-ink-faint transition-[transform,color] duration-300 group-hover:translate-x-1 group-hover:text-mark"
-                >
-                  →
-                </span>
-              </div>
-            </Link>
-          ))}
+
+                <p className="mt-3 text-[0.975rem] leading-[1.7] text-ink-soft">
+                  {project.blurb}
+                </p>
+
+                {/* One auto margin for the whole tail, so previews and footers
+                    line up across a row however long the blurbs above run. */}
+                <div className="mt-auto">
+                  {preview && (
+                    <div className="card-shot mt-7">
+                      {/* Plain img for the same reason as Figure: the placeholder
+                          is an SVG, which next/image will not optimise as-is. */}
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={preview} alt="" loading="lazy" decoding="async" />
+                    </div>
+                  )}
+
+                  <div className="flex items-end justify-between gap-6 pt-8">
+                    <div className="flex flex-wrap gap-x-4 gap-y-1">
+                      {project.stack.slice(0, 3).map((tag) => (
+                        <span key={tag} className="label">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <span
+                      aria-hidden
+                      className="text-ink-faint transition-[transform,color] duration-300 group-hover:translate-x-1 group-hover:text-mark"
+                    >
+                      →
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            );
+          })}
         </div>
       </div>
     </section>
