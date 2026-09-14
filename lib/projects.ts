@@ -92,9 +92,50 @@ const TEMPLATE = {
 } satisfies Omit<Project, "slug" | "name" | "year">;
 
 export const PROJECTS: Project[] = [
-  { ...TEMPLATE, slug: "project-one", name: "Project one", year: "2026" },
-  { ...TEMPLATE, slug: "project-two", name: "Project two", year: "2025" },
-  { ...TEMPLATE, slug: "project-three", name: "Project three", year: "2025" },
+  {
+    ...TEMPLATE,
+    slug: "autonomous-car",
+    name: "Autonomous Car",
+    year: "2026",
+    blurb:
+      "Augmented an RC car chassis with my Jetson Nano running ROS2 to navigate the sidewalk.",
+    cover: {
+      kind: "image",
+      src: "/projects/autonomous-car.jpg",
+      alt: "The Autonomous Car, an RC car chassis augmented with a Jetson Nano",
+      w: 1600,
+      h: 900,
+    },
+  },
+  {
+    ...TEMPLATE,
+    slug: "overwatch-controller",
+    name: "Overwatch Controller",
+    year: "2025",
+    blurb: "Point and shoot like you're actually in the game",
+    cover: {
+      kind: "image",
+      src: "/projects/overwatch-controller.jpg",
+      alt: "The Overwatch Controller, a blue and orange 3D-printed motion controller shaped like a gun",
+      w: 1600,
+      h: 900,
+    },
+  },
+  {
+    ...TEMPLATE,
+    slug: "cost-based-path-planner",
+    name: "Cost Based Path Planner",
+    year: "2025",
+    blurb:
+      "Turned a single camera into a terrain cost map so a rover could plan its own way across it.",
+    cover: {
+      kind: "image",
+      src: "/projects/path-planner.jpg",
+      alt: "The Cost Based Path Planner rover navigating terrain",
+      w: 1600,
+      h: 900,
+    },
+  },
   { ...TEMPLATE, slug: "project-four", name: "Project four", year: "2024" },
 ];
 

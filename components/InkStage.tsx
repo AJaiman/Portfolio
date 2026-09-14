@@ -22,14 +22,11 @@ const SETTLE_MS = 700;
 /** How long a deep arrival holds the stage blank waiting for the scroll to land. */
 const ARRIVE_HOLD_MS = 250;
 
-/** Set once the stage has mounted in this document, so a second mount can be
- *  recognised as a client-side return rather than a first visit. */
-let mountedBefore = false;
-/** When the stage last tore down. React's development double-invoke re-runs the
- *  effect in the same tick, which must not read as the reader having left for a
- *  project page and come back. */
-let lastTeardown = 0;
-const REMOUNT_MS = 50;
+/** Set once the opening has actually run to its end in this document, which is
+ *  what makes a later mount a reader returning from a project page. React's
+ *  development double-invoke remounts before the opening has played, so it
+ *  leaves this unset and the opening still runs — no timing window needed. */
+let introPlayed = false;
 const TITLE_STAGGER = 0.035;
 const ICON_STAGGER = 0.028;
 
@@ -98,13 +95,11 @@ export default function InkStage() {
     // into the section they actually landed on, so the stage arrives already
     // settled instead.
     //
-    // A second mount in the same document only happens on a client-side return,
-    // which is the one case scrollY cannot report: the router restores the
-    // position a frame or two after this effect runs, so the stage waits for it
-    // rather than reading a position that is still zero.
-    const returning =
-      mountedBefore && performance.now() - lastTeardown > REMOUNT_MS;
-    mountedBefore = true;
+    // An opening that already played in this document is the one case scrollY
+    // cannot report: on a client-side return the router restores the position a
+    // frame or two after this effect runs, so the stage waits for it rather than
+    // reading a position that is still zero.
+    const returning = introPlayed;
 
     const landedDeep =
       returning ||
@@ -270,6 +265,7 @@ export default function InkStage() {
 
       if (!revealed && intro >= 1) {
         revealed = true;
+        introPlayed = true;
         for (const s of [...titleSlots.current, ...iconSlots.current]) {
           s?.ink?.setAttribute("stroke-dashoffset", "0");
           s?.ghost?.setAttribute("stroke-dashoffset", "0");
@@ -286,7 +282,6 @@ export default function InkStage() {
     ro.observe(document.body);
 
     return () => {
-      lastTeardown = performance.now();
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", measure);
       for (const type of settleEvents) {
