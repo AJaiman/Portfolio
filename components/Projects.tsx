@@ -42,7 +42,7 @@ export default function Projects() {
   }, []);
 
   return (
-    <section id="projects" className="relative z-10 min-h-[140vh] pt-[42vh] pb-[16vh]">
+    <section id="projects" className="relative z-10 min-h-[140vh] pt-[34vh] pb-[16vh]">
       <div className="gutter">
         <Reveal>
           <p className="max-w-[34rem] text-[1.0625rem] leading-[1.75] text-ink-soft">

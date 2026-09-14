@@ -26,7 +26,7 @@ const TIMELINE = [
 
 export default function Work() {
   return (
-    <section id="work" className="relative z-10 min-h-[130vh] pt-[42vh] pb-[16vh]">
+    <section id="work" className="relative z-10 min-h-[130vh] pt-[34vh] pb-[16vh]">
       <div className="gutter">
         <Reveal>
           <p className="max-w-[34rem] text-[1.0625rem] leading-[1.75] text-ink-soft">

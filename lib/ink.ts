@@ -166,21 +166,21 @@ const clamp = (v: number, lo: number, hi: number) => (v < lo ? lo : v > hi ? hi 
 
 export function titlePlace(index: number, W: number, titleWidth: number): Place {
   if (index === 0) {
-    const s = Math.min(1.6, (W * 0.74) / titleWidth);
-    return { x: (W - titleWidth * s) / 2, y: 470, s };
+    const s = Math.min(1.42, (W * 0.66) / titleWidth);
+    return { x: (W - titleWidth * s) / 2, y: 405, s };
   }
   const margin = Math.max(54, W * 0.065);
-  const s = Math.min(0.82, (W * 0.42) / titleWidth);
-  return { x: margin, y: 152, s };
+  const s = Math.min(0.72, (W * 0.37) / titleWidth);
+  return { x: margin, y: 122, s };
 }
 
 export function iconPlace(index: number, W: number): Place {
   if (index === 0) {
-    return { x: W / 2, y: 228, s: clamp(W * 0.00165, 1.05, 1.8) };
+    return { x: W / 2, y: 190, s: clamp(W * 0.00145, 0.92, 1.55) };
   }
   const margin = Math.max(54, W * 0.065);
-  const s = clamp(W * 0.00075, 0.5, 0.95);
-  return { x: W - margin - 56 * s, y: 140, s };
+  const s = clamp(W * 0.00066, 0.44, 0.84);
+  return { x: W - margin - 56 * s, y: 114, s };
 }
 
 /* ---- morphing ---- */

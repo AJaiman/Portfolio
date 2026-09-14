@@ -20,7 +20,7 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="relative z-10 min-h-[105vh] pt-[42vh] pb-[14vh]"
+      className="relative z-10 min-h-[105vh] pt-[34vh] pb-[14vh]"
     >
       <div className="gutter">
         <Reveal>

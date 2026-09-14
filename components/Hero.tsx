@@ -3,7 +3,7 @@ export default function Hero() {
     <section id="hero" className="relative h-[280vh]">
       <div className="sticky top-0 h-screen">
         <div
-          className="absolute left-1/2 top-[63%] w-full max-w-[36rem] px-7 text-center"
+          className="absolute left-1/2 top-[57%] w-full max-w-[36rem] px-7 text-center"
           style={{
             opacity: "var(--copy-in)",
             transform: "translate(-50%, var(--copy-y))",
