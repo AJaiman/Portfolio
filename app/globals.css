@@ -326,6 +326,7 @@ body::after {
   .plus-mark,
   .plus-ghost,
   .expando,
+  .sketch::after,
   .card-shot img {
     transition: none;
   }

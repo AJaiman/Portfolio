@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import PlusMark from "./PlusMark";
 import Reveal from "./Reveal";
 
 type Entry = {
@@ -22,12 +23,12 @@ const TIMELINE: Entry[] = [
     role: "Software Engineering Intern",
     org: "Lockheed Martin — Rotary and Mission Systems, Command IQ",
     where: "Colorado Springs, CO",
-    note: "Rust microservices for the Command IQ product line, shipped on Kubernetes.",
+    note: "Developed a high-throughput, low-latency data processing microservice in Rust for a real-time sensor analysis system from architecture to validation and dpeloyment.",
     points: [
-      "Built REST and gRPC APIs in Rust for microservices that derive and serve protobuf data models for the Command IQ product line.",
-      "Developed and deployed services from scratch on Kubernetes using Helm across Unix-based environments, working through configuration and deployment issues in the team's CI/CD pipeline.",
-      "Wrote unit tests for every code change and ran integration testing of the core threat evaluation system against a custom in-house simulator, validating end-to-end behavior before release.",
-      "Extended a core threat evaluation microservice consumed by five downstream services, working with backend and systems engineers to integrate it into the deployed Command IQ product.",
+      "The system lacked a way to process a key category of incoming sensor data in real-time, creating a gap its analysis pipeline.",
+      "Designed and built a multi-threaded microservice in Rust from scratch to perform thousands of time-sensitive calculations per second on incoming data.",
+      "Architected a gRPC API to integrate the service with the broader analysis system, and implemented the algorithm that combined its output with live data to generate real-time assessments.",
+      "Validated the system using an in-house simulator generating synthetic data, confirming reliable performance under high volumes of data.",
     ],
   },
   {
@@ -35,14 +36,14 @@ const TIMELINE: Entry[] = [
     span: "2025 — 2026",
     kind: "work",
     role: "Embedded Software Engineer",
-    org: "UW Formula Motorsports — Battery Management System firmware",
+    org: "UW Formula Motorsports — Firmware Team",
     where: "Seattle, WA",
-    note: "Battery management firmware on an RP2040: SPI drivers, FreeRTOS, cell balancing.",
+    note: "Engineered realtime firmware for the battery management system and for the dashboard to display driverless perception and planning data.",
     points: [
-      "Wrote low-level SPI drivers in C++ on an RP2040 straight from datasheet specs to talk to an ADBMS6830 analog front end and an MCP2515 CAN controller, configuring and triggering onboard ADC conversions to read per-cell voltages and GPIO-connected thermistor circuits for temperature.",
-      "Engineered real-time voltage, temperature, and current monitoring across seven cells, using FreeRTOS task scheduling to run hardware polling and fault detection concurrently without race conditions over shared SPI and CAN peripherals — guarding against thermal runaway and over/under-voltage.",
-      "Developed a passive cell balancing algorithm that holds voltage deltas within 10 mV, extending pack lifespan.",
-      "Validated the firmware with hardware-in-the-loop testing on a bench rig: cross-checking voltage and temperature readings against a voltmeter and ground-truth sensors, verifying CAN communication, and injecting faults to confirm the detection logic fired.",
+      "Migrating the LVBMS PCB from the LTC6813 to the ADBMS6830 required a complete firmware rewrite to support the new analog cell monitoring IC",
+      "Designed low-level SPI drivers in C++ to configure voltage, temperature, current monitoring, and passive balancing on the ADBMS, and to transmit telemetry over CAN via the MCP2515 transceiver.",
+      "Implemented RTOS tasks to poll the ADBMS and MCP2515 concurrently, and to detect faults in real-time",
+      "Performed hardware in the loop testing with a seven-cell Li-ion pack, cross-checking voltage and temperature readings against a voltmeter and ground-truth sensors, verifying CAN communication, and injecting faults to confirm the protection logic fired.",
     ],
   },
   {
@@ -50,9 +51,9 @@ const TIMELINE: Entry[] = [
     span: "2025",
     kind: "work",
     role: "AI Engineering Intern",
-    org: "Nēdl Labs — Health policy data extraction",
+    org: "Nēdl Labs — Data Extraction Harness",
     where: "Remote",
-    note: "An LLM pipeline turning unstructured insurance policy text into structured JSON.",
+    note: "Designed an AI agent harness to extract structured data from unstructured health insurance policy text to mitigate malformed extractions by 100%.",
     points: [
       "Architected a modular Python pipeline that turns unstructured health insurance policy text into structured JSON using large language models, saving $10K in costs.",
       "Integrated LangChain and Pydantic to enforce JSON schema validation, eliminating malformed outputs.",
@@ -64,9 +65,9 @@ const TIMELINE: Entry[] = [
     span: "2024",
     kind: "work",
     role: "Research Intern",
-    org: "Texas A&M University — AI-powered pathfinding",
+    org: "Texas A&M University — Independent Research Project",
     where: "Remote",
-    note: "Rover localization and pathfinding from one onboard camera instead of satellite data.",
+    note: "Built and tested rover localization and pathfinding software that uses a monocular depth-estimation model to replace satellite powered DEM data, enabling navigation in GPS-denied environments.",
     points: [
       "Researched and implemented a novel extraterrestrial rover localization method in Python that swaps satellite data for a Hugging Face monocular depth-estimation model and an onboard camera, with no loss in pathfinding accuracy.",
       "Adapted cost calculation functions from the satellite-based pathfinding algorithm and applied A* search to point cloud data generated with Open3D, separating traversable from untraversable zones with 95% accuracy.",
@@ -75,10 +76,10 @@ const TIMELINE: Entry[] = [
   },
   {
     id: "uw",
-    span: "2024 — 2027",
+    span: "2025 — 2028",
     kind: "education",
     role: "B.S. Computer Science",
-    org: "University of Washington — Paul G. Allen School",
+    org: "University of Washington",
     where: "Seattle, WA",
     note: "Paul G. Allen School of Computer Science & Engineering. GPA 3.94.",
     points: [
@@ -88,34 +89,16 @@ const TIMELINE: Entry[] = [
   },
 ];
 
-/** Drawn rather than set in a font, so it keeps the double-stroke the rest of
- *  the page uses: a committed line with the searching one showing under it. */
-function PlusMark({ open }: { open: boolean }) {
-  return (
-    <svg
-      viewBox="0 0 20 20"
-      className={`plus-mark ${open ? "is-open" : ""}`}
-      aria-hidden
-    >
-      <g className="plus-ghost">
-        <path d="M3.5 10.4C7.1 9.9 13.1 10.1 16.7 10.2" />
-        <path d="M10.3 3.5C9.9 7.1 10 13.1 10.2 16.7" />
-      </g>
-      <g className="plus-ink">
-        <path d="M3 10C6.6 9.5 12.6 9.7 16.2 9.8" />
-        <path d="M9.9 3.1C9.5 6.7 9.6 12.7 9.8 16.3" />
-      </g>
-    </svg>
-  );
-}
-
 export default function Work() {
   // The opening entry is expanded on arrival so the section never reads as a
   // wall of shut rows; opening another closes whatever was open.
   const [open, setOpen] = useState<string | null>(TIMELINE[0].id);
 
   return (
-    <section id="work" className="relative z-10 min-h-[130vh] pt-[34vh] pb-[16vh]">
+    <section
+      id="work"
+      className="relative z-10 min-h-[130vh] pt-[34vh] pb-[16vh]"
+    >
       <div className="gutter">
         <Reveal>
           <p className="max-w-[34rem] text-[1.0625rem] leading-[1.75] text-ink-soft">
@@ -148,7 +131,9 @@ export default function Work() {
                       {/* Narrow screens stack the dates above the entry; at sm
                           they step out into their own left-hand column. */}
                       <span className="col-start-1 row-start-1 sm:pt-1">
-                        <span className="label block text-mark">{item.span}</span>
+                        <span className="label block text-mark">
+                          {item.span}
+                        </span>
                         <span className="label mt-1.5 block">{item.kind}</span>
                       </span>
 
@@ -180,7 +165,7 @@ export default function Work() {
                         {item.points.map((point) => (
                           <li
                             key={point}
-                            className="entry-point text-[0.975rem] leading-[1.7] text-ink-soft"
+                            className="entry-point text-[0.9rem] leading-[1.75] text-ink-soft"
                           >
                             {point}
                           </li>
