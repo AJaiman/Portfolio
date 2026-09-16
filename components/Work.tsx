@@ -101,14 +101,7 @@ export default function Work() {
       className="relative z-10 min-h-[130vh] pt-[34vh] pb-[16vh]"
     >
       <div className="gutter">
-        <Reveal>
-          <p className="max-w-[34rem] text-[1.0625rem] leading-[1.75] text-ink-soft">
-            Where I&apos;ve been, most recent first. Open one to read the
-            details.
-          </p>
-        </Reveal>
-
-        <ol className="mt-16 max-w-[52rem]">
+        <ol className="mt-5 max-w-[52rem]">
           {TIMELINE.map((item, i) => {
             const isOpen = open === item.id;
             return (

@@ -46,14 +46,7 @@ export default function Projects() {
       className="relative z-10 min-h-[140vh] pt-[34vh] pb-[16vh]"
     >
       <div className="gutter">
-        <Reveal>
-          <p className="max-w-[34rem] text-[1.0625rem] leading-[1.75] text-ink-soft">
-            Things I built because I wanted to see if they would work. The
-            finished ones go to their repo.
-          </p>
-        </Reveal>
-
-        <div className="mt-16 grid max-w-[62rem] gap-7 sm:grid-cols-2">
+        <div className="mt-5 grid max-w-[62rem] gap-7 sm:grid-cols-2">
           {PROJECTS.map((project, i) => {
             // Nothing to link to while a project is still in progress, so its
             // card is a plain box rather than a link that goes nowhere.

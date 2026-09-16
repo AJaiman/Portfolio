@@ -22,17 +22,10 @@ export default function Contact() {
       className="relative z-10 min-h-[105vh] pt-[34vh] pb-[14vh]"
     >
       <div className="gutter">
-        <Reveal>
-          <p className="max-w-[34rem] text-[1.0625rem] leading-[1.75] text-ink-soft">
-            Open to internships, collaborations, and anyone who wants to argue
-            about pencils.
-          </p>
-        </Reveal>
-
         <Reveal delay={90}>
           <a
             href={`mailto:${EMAIL}`}
-            className="link-underline mt-14 inline-block text-[clamp(1.5rem,5vw,2.75rem)] leading-tight text-ink"
+            className="link-underline mt-5 inline-block text-[clamp(1.5rem,5vw,2.75rem)] leading-tight text-ink"
           >
             {EMAIL}
           </a>
