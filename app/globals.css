@@ -33,6 +33,14 @@
 }
 
 html {
+  /* The ink doodles are drawn into a viewport-sized stage, so they grow with
+     the window while anything sized in rem stays put — which is what makes the
+     page read small next to the drawing on a large monitor. Scaling the root
+     brings the type, spacing and the content column (both in rem) along with
+     it. Flat 16px up to 1152px, so phones and laptops are untouched, then a
+     step up to 22px by ~2560px. rem here resolves against the browser's own
+     base size, so a reader who has set a larger default keeps it. */
+  font-size: clamp(1rem, 0.625rem + 0.521vw, 1.375rem);
   scroll-behavior: smooth;
 }
 
