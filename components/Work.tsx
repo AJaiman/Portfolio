@@ -25,7 +25,7 @@ const TIMELINE: Entry[] = [
     where: "Colorado Springs, CO",
     note: "Developed a high-throughput, low-latency data processing microservice in Rust for a real-time sensor analysis system from architecture to validation and deployment.",
     points: [
-      "The system lacked a way to process a key category of incoming sensor data in real-time, creating a gap its analysis pipeline.",
+      "The system lacked a way to process a key category of incoming sensor data in real-time, creating a gap in its analysis pipeline.",
       "Designed and built a multi-threaded microservice in Rust from scratch to perform thousands of time-sensitive calculations per second on incoming data.",
       "Architected a gRPC API to integrate the service with the broader analysis system, and implemented the algorithm that combined its output with live data to generate real-time assessments.",
       "Validated the system using an in-house simulator generating synthetic data, confirming reliable performance under high volumes of data.",
@@ -56,7 +56,7 @@ const TIMELINE: Entry[] = [
     note: "Designed an AI agent harness to extract structured data from unstructured health insurance policy text to mitigate malformed extractions by 100%.",
     points: [
       "All health insurance policy documents are public, but unstructured, and the company needed to aggregate it all in a structured data format.",
-      "Designed an LLM powered pipline to extract structured data from insurance company websites, PDFs, and other unstructured text sources.",
+      "Designed an LLM powered pipeline to extract structured data from insurance company websites, PDFs, and other unstructured text sources.",
       "Benchmarked multiple LLMs and prompt strategies to find the most accurate and cost-effective solution for extracting structured data from unstructured text.",
       "Integrated LangChain and Pydantic to strictly enforce JSON schema validation, eliminating malformed outputs by 100%.",
     ],

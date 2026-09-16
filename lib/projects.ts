@@ -75,7 +75,7 @@ export const PROJECTS: Project[] = [
     name: "Internia",
     year: "2024",
     blurb:
-      "A web app that helps users find research papers with a like/dislike reccommendation system.",
+      "A web app that helps users find research papers with a like/dislike recommendation system.",
     href: "https://github.com/AJaiman/Internia",
     stack: ["TypeScript", "React", "MongoDB"],
     cover: {
