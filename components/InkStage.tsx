@@ -5,6 +5,7 @@ import {
   buildEntry,
   buildStates,
   ICON_SLOTS,
+  fallbackInset,
   iconPlace,
   matchDirections,
   morphStroke,
@@ -12,6 +13,7 @@ import {
   STAGE_H,
   TITLE_SLOTS,
   titlePlace,
+  toStageX,
   type InkState,
   type Place,
 } from "@/lib/ink";
@@ -52,12 +54,24 @@ export default function InkStage() {
     const entry = calm ? states[0] : buildEntry(states[0]);
 
     let W = 1440;
+    let inset = fallbackInset(W);
+
+    // The content column's left edge, read off a real .gutter so the drawn
+    // titles sit on the same line as the text however the CSS centres it.
+    const measureInset = () => {
+      const el = document.querySelector(".gutter");
+      const stageCssW = document.documentElement.clientWidth;
+      if (!el) return fallbackInset(W);
+      const pad = parseFloat(getComputedStyle(el).paddingLeft) || 0;
+      return toStageX(el.getBoundingClientRect().left + pad, W, stageCssW);
+    };
     let titleFlags: Uint8Array[] = [];
     let iconFlags: Uint8Array[] = [];
     let tops: number[] = SECTIONS.map(() => 0);
 
     const measure = () => {
       W = Math.round(STAGE_H * (window.innerWidth / window.innerHeight));
+      inset = measureInset();
       setStageW(W);
 
       tops = SECTIONS.map(({ id }) => {
@@ -65,22 +79,16 @@ export default function InkStage() {
         return el ? el.getBoundingClientRect().top + window.scrollY : 0;
       });
 
-      const tp = (i: number) => titlePlace(i, W, states[i].titleWidth);
+      const tp = (i: number) => titlePlace(i, W, states[i].titleWidth, inset);
+      const ip = (i: number) => iconPlace(i, W, inset);
       titleFlags = [matchDirections(entry.title, states[0].title, tp(0), tp(0))];
-      iconFlags = [
-        matchDirections(entry.icon, states[0].icon, iconPlace(0, W), iconPlace(0, W)),
-      ];
+      iconFlags = [matchDirections(entry.icon, states[0].icon, ip(0), ip(0))];
       for (let i = 0; i < states.length - 1; i++) {
         titleFlags.push(
           matchDirections(states[i].title, states[i + 1].title, tp(i), tp(i + 1))
         );
         iconFlags.push(
-          matchDirections(
-            states[i].icon,
-            states[i + 1].icon,
-            iconPlace(i, W),
-            iconPlace(i + 1, W)
-          )
+          matchDirections(states[i].icon, states[i + 1].icon, ip(i), ip(i + 1))
         );
       }
     };
@@ -254,12 +262,12 @@ export default function InkStage() {
 
       paint(
         titleSlots.current, A, B, "title",
-        titlePlace(ia, W, A.titleWidth), titlePlace(ib, W, B.titleWidth),
+        titlePlace(ia, W, A.titleWidth, inset), titlePlace(ib, W, B.titleWidth, inset),
         titleFlags[pair], TITLE_SLOTS, TITLE_STAGGER, t, now, intro, drift
       );
       paint(
         iconSlots.current, A, B, "icon",
-        iconPlace(ia, W), iconPlace(ib, W),
+        iconPlace(ia, W, inset), iconPlace(ib, W, inset),
         iconFlags[pair], ICON_SLOTS, ICON_STAGGER, t, now, intro, drift
       );
 

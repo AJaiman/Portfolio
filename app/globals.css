@@ -9,6 +9,11 @@
   --blue: #8fb5d4;
   --red: #c4462a;
 
+  /* The content column. The ink stage mirrors these in lib/ink.ts so the drawn
+     titles keep sitting on the same edges as the text below them. */
+  --page-max: 72rem;
+  --page-pad: 5rem;
+
   --copy-in: 0;
   --copy-y: 20px;
   --hint: 1;
@@ -112,9 +117,15 @@ body::after {
 
 /* ---- shared marks ---- */
 
-/* Matches the left margin the drawn section titles sit at. */
+/* The content column, centred once the viewport outgrows it. Below that width
+   it stays full-bleed on a plain percentage gutter, which is what phones and
+   laptops see. The drawn section titles sit on the same edges — see gutterInset
+   in lib/ink.ts. */
 .gutter {
-  padding-inline: max(32px, 6.5vw);
+  width: 100%;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding-inline: clamp(32px, 6.5vw, var(--page-pad));
 }
 
 .label {

@@ -164,23 +164,37 @@ export function buildEntry(state: InkState): InkState {
 
 const clamp = (v: number, lo: number, hi: number) => (v < lo ? lo : v > hi ? hi : v);
 
-export function titlePlace(index: number, W: number, titleWidth: number): Place {
+/* The drawn titles hang off the same edge as the text below them, which the
+   .gutter rule in globals.css owns. Rather than restate that geometry here and
+   let the two drift apart, the stage measures a real .gutter box and converts
+   it — see measureInset in InkStage. The stage is only as wide as the viewport
+   minus any scrollbar, so that width, not innerWidth, is what maps onto W. */
+export const toStageX = (cssX: number, W: number, stageCssW: number): number =>
+  stageCssW > 0 ? cssX * (W / stageCssW) : cssX;
+
+/* Only for a stage that mounts before there is a .gutter to measure. */
+export const fallbackInset = (W: number): number => Math.max(54, W * 0.065);
+
+export function titlePlace(
+  index: number,
+  W: number,
+  titleWidth: number,
+  inset: number
+): Place {
   if (index === 0) {
     const s = Math.min(1.42, (W * 0.66) / titleWidth);
     return { x: (W - titleWidth * s) / 2, y: 405, s };
   }
-  const margin = Math.max(54, W * 0.065);
   const s = Math.min(0.72, (W * 0.37) / titleWidth);
-  return { x: margin, y: 122, s };
+  return { x: inset, y: 122, s };
 }
 
-export function iconPlace(index: number, W: number): Place {
+export function iconPlace(index: number, W: number, inset: number): Place {
   if (index === 0) {
     return { x: W / 2, y: 190, s: clamp(W * 0.00145, 0.92, 1.55) };
   }
-  const margin = Math.max(54, W * 0.065);
   const s = clamp(W * 0.00066, 0.44, 0.84);
-  return { x: W - margin - 56 * s, y: 114, s };
+  return { x: W - inset - 56 * s, y: 114, s };
 }
 
 /* ---- morphing ---- */
