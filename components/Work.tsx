@@ -38,7 +38,7 @@ const TIMELINE: Entry[] = [
     role: "Embedded Software Engineer",
     org: "UW Formula Motorsports — Firmware Team",
     where: "Seattle, WA",
-    note: "Engineered realtime firmware for the battery management system and for the dashboard to display driverless perception and planning data.",
+    note: "Engineered realtime, safety-critical firmware for the battery management system",
     points: [
       "Migrating the LVBMS PCB from the LTC6813 to the ADBMS6830 required a complete firmware rewrite to support the new analog cell monitoring IC",
       "Designed low-level SPI drivers in C++ to configure voltage, temperature, current monitoring, and passive balancing on the ADBMS, and to transmit telemetry over CAN via the MCP2515 transceiver.",
@@ -55,9 +55,10 @@ const TIMELINE: Entry[] = [
     where: "Remote",
     note: "Designed an AI agent harness to extract structured data from unstructured health insurance policy text to mitigate malformed extractions by 100%.",
     points: [
-      "Architected a modular Python pipeline that turns unstructured health insurance policy text into structured JSON using large language models, saving $10K in costs.",
-      "Integrated LangChain and Pydantic to enforce JSON schema validation, eliminating malformed outputs.",
-      "Designed a two-stage compression pipeline that has the model distill long policy documents down to their key information before the main extraction prompt runs — clearing the context-length limits that had kept smaller models from handling files of 50+ pages.",
+      "All health insurance policy documents are public, but unstructured, and the company needed to aggregate it all in a structured data format.",
+      "Designed an LLM powered pipline to extract structured data from insurance company websites, PDFs, and other unstructured text sources.",
+      "Benchmarked multiple LLMs and prompt strategies to find the most accurate and cost-effective solution for extracting structured data from unstructured text.",
+      "Integrated LangChain and Pydantic to strictly enforce JSON schema validation, eliminating malformed outputs by 100%.",
     ],
   },
   {
@@ -69,8 +70,9 @@ const TIMELINE: Entry[] = [
     where: "Remote",
     note: "Built and tested rover localization and pathfinding software that uses a monocular depth-estimation model to replace satellite powered DEM data, enabling navigation in GPS-denied environments.",
     points: [
-      "Researched and implemented a novel extraterrestrial rover localization method in Python that swaps satellite data for a Hugging Face monocular depth-estimation model and an onboard camera, with no loss in pathfinding accuracy.",
-      "Adapted cost calculation functions from the satellite-based pathfinding algorithm and applied A* search to point cloud data generated with Open3D, separating traversable from untraversable zones with 95% accuracy.",
+      "Existing rover localization and pathfinding algorithms rely on satellite-generated digital elevation maps but many extraplanetary environments lack satellite coverage.",
+      "Benchmarked monocular depth-estimation models from Hugging Face with the KITTI dataset on a Jetson Orin Nano GPU, and selected the DepthAnything ViT for the rover localization algorithm.",
+      "Conducted a literature survey of existing cost based pathfinding algorithms and developed obstacle/elevation scoring algorithms to determine traversable areas.",
       "Accelerated image-to-map conversion by running PyTorch depth inference on a Jetson Orin Nano GPU with CUDA.",
     ],
   },
@@ -84,7 +86,6 @@ const TIMELINE: Entry[] = [
     note: "Paul G. Allen School of Computer Science & Engineering. GPA 3.94.",
     points: [
       "Relevant coursework: Discrete Mathematics; Linear Algebra; Computer Architecture and Hardware-Software Systems; Probability, Statistics & Machine Learning Foundations.",
-      "Hold an active Secret security clearance.",
     ],
   },
 ];
