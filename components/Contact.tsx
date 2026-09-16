@@ -13,7 +13,6 @@ const SOCIALS = [
     handle: "in/aravjaiman",
     href: "https://linkedin.com/in/aravjaiman",
   },
-  { label: "X", handle: "@aravjaiman", href: "https://x.com/aravjaiman" },
 ];
 
 export default function Contact() {

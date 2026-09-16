@@ -7,7 +7,7 @@ import Reveal from "./Reveal";
 const clamp01 = (v: number) => (v < 0 ? 0 : v > 1 ? 1 : v);
 
 export default function Projects() {
-  const cards = useRef<(HTMLAnchorElement | null)[]>([]);
+  const cards = useRef<(HTMLElement | null)[]>([]);
 
   useEffect(() => {
     const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -48,67 +48,82 @@ export default function Projects() {
       <div className="gutter">
         <Reveal>
           <p className="max-w-[34rem] text-[1.0625rem] leading-[1.75] text-ink-soft">
-            Things I built because I wanted to see if they would work. Each one
-            goes to its repo.
+            Things I built because I wanted to see if they would work. The
+            finished ones go to their repo.
           </p>
         </Reveal>
 
         <div className="mt-16 grid max-w-[62rem] gap-7 sm:grid-cols-2">
-          {PROJECTS.map((project, i) => (
-            <a
-              key={project.slug}
-              href={project.href}
-              target="_blank"
-              rel="noreferrer"
-              ref={(el) => {
-                cards.current[i] = el;
-              }}
-              style={{ opacity: 0, transform: "translate3d(0, 96px, 0)" }}
-              className="sketch group flex h-full flex-col p-8"
-            >
-              <div className="flex items-baseline justify-between gap-6">
-                <h3 className="text-[1.35rem] leading-snug text-ink">
-                  {project.name}
-                </h3>
-                <span className="label shrink-0">{project.year}</span>
-              </div>
-
-              <p className="mt-3 text-[0.975rem] leading-[1.7] text-ink-soft">
-                {project.blurb}
-              </p>
-
-              {/* One auto margin for the whole tail, so previews and footers
-                  line up across a row however long the blurbs above run. */}
-              <div className="mt-auto">
-                {project.cover && (
-                  <div className="card-shot mt-7">
-                    {/* Plain img because the placeholder is an SVG, which
-                        next/image will not optimise as-is. */}
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={project.cover.src}
-                      alt=""
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </div>
-                )}
-
-                <div className="flex items-end justify-between gap-6 pt-8">
-                  <div className="flex flex-wrap gap-x-4 gap-y-1">
-                    {project.stack.slice(0, 3).map((tag) => (
-                      <span key={tag} className="label">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                  <span className="label shrink-0 transition-[transform,color] duration-300 group-hover:translate-x-0.5 group-hover:text-mark">
-                    GitHub <span aria-hidden>↗</span>
-                  </span>
+          {PROJECTS.map((project, i) => {
+            // Nothing to link to while a project is still in progress, so its
+            // card is a plain box rather than a link that goes nowhere.
+            const Tag = project.inProgress ? "div" : "a";
+            return (
+              <Tag
+                key={project.slug}
+                {...(project.inProgress
+                  ? {}
+                  : {
+                      href: project.href,
+                      target: "_blank",
+                      rel: "noreferrer",
+                    })}
+                ref={(el: HTMLElement | null) => {
+                  cards.current[i] = el;
+                }}
+                style={{ opacity: 0, transform: "translate3d(0, 96px, 0)" }}
+                className="sketch group flex h-full flex-col p-8"
+              >
+                <div className="flex items-baseline justify-between gap-6">
+                  <h3 className="text-[1.35rem] leading-snug text-ink">
+                    {project.name}
+                  </h3>
+                  <span className="label shrink-0">{project.year}</span>
                 </div>
-              </div>
-            </a>
-          ))}
+
+                <p className="mt-3 text-[0.975rem] leading-[1.7] text-ink-soft">
+                  {project.blurb}
+                </p>
+
+                {/* One auto margin for the whole tail, so previews and footers
+                    line up across a row however long the blurbs above run. */}
+                <div className="mt-auto">
+                  {project.cover && (
+                    <div className="card-shot mt-7">
+                      {/* Plain img because the placeholder is an SVG, which
+                          next/image will not optimise as-is. */}
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={project.cover.src}
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </div>
+                  )}
+
+                  <div className="flex items-end justify-between gap-6 pt-8">
+                    <div className="flex flex-wrap gap-x-4 gap-y-1">
+                      {project.stack.slice(0, 3).map((tag) => (
+                        <span key={tag} className="label">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    {project.inProgress ? (
+                      <span className="label shrink-0 text-mark">
+                        In progress
+                      </span>
+                    ) : (
+                      <span className="label shrink-0 transition-[transform,color] duration-300 group-hover:translate-x-0.5 group-hover:text-mark">
+                        GitHub <span aria-hidden>↗</span>
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </Tag>
+            );
+          })}
         </div>
       </div>
     </section>

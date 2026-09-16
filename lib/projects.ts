@@ -7,6 +7,8 @@ export type Project = {
   blurb: string;
   /** Where the card goes. The repo, normally. */
   href: string;
+  /** Still being built — the card drops its link and says so instead. */
+  inProgress?: boolean;
   /** The card's thumbnail. Leave it off and the card renders without one. */
   cover?: { src: string; alt: string };
   /** First three show on the card. */
@@ -33,8 +35,8 @@ export const PROJECTS: Project[] = [
     year: "2026",
     blurb:
       "Augmented an RC car chassis with my Jetson Nano running ROS2 to navigate the sidewalk.",
-    // TODO: swap in the repo URL
-    href: "https://github.com/aravjaiman",
+    inProgress: true,
+    stack: ["Python", "ROS2", "Jetson Nano"],
     cover: {
       src: "/projects/autonomous-car.jpg",
       alt: "The Autonomous Car, an RC car chassis augmented with a Jetson Nano",
@@ -46,8 +48,8 @@ export const PROJECTS: Project[] = [
     name: "Overwatch Controller",
     year: "2025",
     blurb: "Point and shoot like you're actually in the game",
-    // TODO: swap in the repo URL
     href: "https://github.com/AJaiman/Overwatch-Controller",
+    stack: ["C++", "Arduino", "3D Printing"],
     cover: {
       src: "/projects/overwatch-controller.jpg",
       alt: "The Overwatch Controller, a blue and orange 3D-printed motion controller shaped like a gun",
@@ -60,8 +62,8 @@ export const PROJECTS: Project[] = [
     year: "2025",
     blurb:
       "A monocular camera based approach to rover localization and path planning.",
-    // TODO: swap in the repo URL
     href: "https://github.com/AJaiman/Cost-Based-Path-Planner",
+    stack: ["PyTorch", "ML", "Jetson Orin Nano"],
     cover: {
       src: "/projects/path-planner.jpg",
       alt: "The Cost Based Path Planner rover navigating terrain",
@@ -74,8 +76,8 @@ export const PROJECTS: Project[] = [
     year: "2024",
     blurb:
       "A web app that helps users find research papers with a like/dislike reccommendation system.",
-    // TODO: swap in the repo URL
     href: "https://github.com/AJaiman/Internia",
+    stack: ["TypeScript", "React", "MongoDB"],
     cover: {
       src: "/projects/internia.jpg",
       alt: "Internia landing page",

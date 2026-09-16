@@ -17,7 +17,12 @@ export default function Hero() {
           </p>
 
           <div className="pointer-events-auto mt-9 flex flex-wrap items-center justify-center gap-5">
-            <a className="btn btn-solid" href="/resume.pdf">
+            <a
+              className="btn btn-solid"
+              href="/resume.pdf"
+              target="_blank"
+              rel="noreferrer"
+            >
               Resume
             </a>
             <a className="btn" href="#contact">
