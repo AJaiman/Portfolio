@@ -23,7 +23,7 @@ const TIMELINE: Entry[] = [
     role: "Software Engineering Intern",
     org: "Lockheed Martin — Rotary and Mission Systems, Command IQ",
     where: "Colorado Springs, CO",
-    note: "Developed a high-throughput, low-latency data processing microservice in Rust for a real-time sensor analysis system from architecture to validation and dpeloyment.",
+    note: "Developed a high-throughput, low-latency data processing microservice in Rust for a real-time sensor analysis system from architecture to validation and deployment.",
     points: [
       "The system lacked a way to process a key category of incoming sensor data in real-time, creating a gap its analysis pipeline.",
       "Designed and built a multi-threaded microservice in Rust from scratch to perform thousands of time-sensitive calculations per second on incoming data.",
